@@ -1,27 +1,47 @@
 import React from 'react';
-import Logo from './Img/logo.jpg';
-import  './style/ytube.css';
+import SearchBar from './Searchbar';
+import youtube from './apis/youtube';
+import VideoList from './VideosList';
+import VideoDetail from './VideoDetail';
 
+class App extends React.Component {
+    state = {
+        videos: [],
+        selectedVideo: null
+    }
+    handleSubmit = async (termFromSearchBar) => {
+        const response = await youtube.get('/search', {
+            params: {
+                q: termFromSearchBar
+            }
+        })
 
-function App() {
-  return (
-    <div className="div1">
-      <div>
-      <header>
-          <h1>YouTube Channel SearchBar </h1>
-      </header>
-      <div className="Logo">
-          <img src={Logo} alt="Youtube channel"/>
-      </div>
+        this.setState({
+            videos: response.data.items
+        })
+        console.log("this is resp",response);
+    };
+    handleVideoSelect = (video) => {
+        this.setState({selectedVideo: video})
+    }
 
-      </div>   
-    </div>
-    <div className="div2">
-      <div>
-        
-      </div>
-    </div>
-  );
+    render() {
+        return (
+            <div className='ui container' style={{marginTop: '1em'}}>
+                <SearchBar handleFormSubmit={this.handleSubmit}/>
+                <div className='ui grid'>
+                    <div className="ui row">
+                        <div className="eleven wide column">
+                            <VideoDetail video={this.state.selectedVideo}/>
+                        </div>
+                        <div className="five wide column">
+                            <VideoList handleVideoSelect={this.handleVideoSelect} videos={this.state.videos}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default App;

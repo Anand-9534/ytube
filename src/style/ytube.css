@@ -1,9 +1,10 @@
-.div1{
-    display: flex;
-    flex-direction: ;
-    justify-content: center;
-    background-color: wheat;
+.video-item {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer;
 }
-.Logo{
-   margin-top: 10px;
+
+.video-item.item img {
+    max-width: 200px;
+    max-height: 250px ;
 }
